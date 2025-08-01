@@ -1,9 +1,11 @@
 const express = require('express');
 const axios = require('axios');
+const path = require('path');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
 app.use(express.json());
+app.use(express.static(path.join(__dirname, 'public')));
 
 // In-memory data stores
 const users = []; // {id, username, password}
@@ -79,6 +81,12 @@ app.post('/orders', async (req, res) => {
     status: 'preparing',
     total,
   };
+  order.bill = {
+    orderId: order.id,
+    customerName: order.customerName,
+    items: order.items.map(i => ({ name: i.name, price: i.price })),
+    total: order.total,
+  };
   orders.push(order);
 
   // Notify backend the order has been received and is being prepared
@@ -115,6 +123,13 @@ app.put('/orders/:id/status', async (req, res) => {
 
 app.get('/orders', (req, res) => {
   res.json(orders);
+});
+
+app.get('/orders/:id/bill', (req, res) => {
+  const id = parseInt(req.params.id, 10);
+  const order = orders.find(o => o.id === id);
+  if (!order) return res.status(404).json({ error: 'Order not found' });
+  res.json(order.bill);
 });
 
 // Simple analytics endpoint

@@ -1,33 +1,25 @@
-# Restaurant App
+# Crypto Exchange Backend (Scaffold)
 
-This is a simple Node.js/Express server for restaurants to manage orders.
+This project is the beginning of a Node.js/Express backend for an Indian cryptocurrency exchange platform. It currently implements basic user authentication with JWT and uses an in-memory user store.
 
-## Features
-- User signup and login
-- Add and edit menu items
-- Receive orders from the main backend
-- Update order status
-- Simple analytics (total orders and revenue)
+## Setup
 
-The app communicates with the main backend at `https://backend-grab.onrender.com` to update order status.
+1. Copy `.env.example` to `.env` and set a strong value for `JWT_SECRET`.
+2. Install dependencies:
+   ```bash
+   npm install
+   ```
+3. Start the development server:
+   ```bash
+   npm start
+   ```
 
-## Usage
+The server runs on the port specified in `PORT` (defaults to `3000`).
 
-```
-npm install
-npm start
-```
+## API Routes
 
-This starts the server on port 3000.
+- `POST /api/auth/register` – create a new user account.
+- `POST /api/auth/login` – authenticate and receive a JWT.
+- `GET /api/user/me` – fetch the current user's profile (requires `Authorization: Bearer <token>`).
 
-### API Endpoints
-- `POST /signup` – register a new user
-- `POST /login` – login a user
-- `POST /menu` – add a menu item
-- `PUT /menu/:id` – edit a menu item
-- `GET /menu` – list menu items
-- `POST /orders` – create an order (called by the main backend)
-- `PUT /orders/:id/status` – update order status
-- `GET /orders` – list orders
-- `GET /analytics` – show order count and revenue
-```
+More modules such as KYC handling, INR and crypto wallets, trading engine, and admin features will be added in subsequent iterations.
